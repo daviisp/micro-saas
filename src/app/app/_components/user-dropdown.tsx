@@ -18,6 +18,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -36,7 +37,17 @@ export function UserDropdown({ user }: UserDropdownProps) {
           <Avatar className="h-8 w-8">
             <AvatarImage src="/avatars/01.png" alt="@shadcn" />
             <AvatarFallback className="font-medium">
-              {user?.name?.slice(0, 1)}
+              {user.image ? (
+                <Image
+                  src={user.image}
+                  width={50}
+                  height={50}
+                  alt={user.name!}
+                  unoptimized
+                />
+              ) : (
+                user.name?.slice(0, 1)
+              )}
             </AvatarFallback>
           </Avatar>
         </Button>
