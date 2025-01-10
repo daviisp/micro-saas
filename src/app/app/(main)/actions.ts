@@ -49,6 +49,23 @@ export async function findTodo(todoId: string) {
   return todo;
 }
 
+export async function updateTodoTitle(todoId: string, todoTitle: string) {
+  const todoAlreadyExists = await findTodo(todoId);
+
+  if (!todoAlreadyExists) {
+    return;
+  }
+
+  await prisma.todo.update({
+    where: {
+      id: todoAlreadyExists?.id,
+    },
+    data: {
+      title: todoTitle,
+    },
+  });
+}
+
 export async function updateTodo(todoId: string) {
   const todoAlreadyExists = await findTodo(todoId);
 

@@ -32,7 +32,7 @@ export function ClientSidebar({ user }: ClientSidebarProps) {
         <Link
           href="/app"
           className={cn(
-            "flex items-center gap-2 text-sm p-1 mr-4 rounded-xl font-medium",
+            "flex items-center gap-2 text-sm px-1.5 py-2 mr-4 rounded-xl font-medium",
             isActive("/app") && theme.theme === "light"
               ? "bg-slate-200"
               : isActive("/app") && theme.theme === "dark"
@@ -46,7 +46,7 @@ export function ClientSidebar({ user }: ClientSidebarProps) {
         <Link
           href="/app/settings"
           className={cn(
-            "flex items-center gap-2 text-sm p-1 mr-4 rounded-full font-medium",
+            "flex items-center gap-2 text-sm px-1.5 py-2 mr-4 rounded-full font-medium",
             isActive("/app/settings") && theme.theme === "light"
               ? "bg-slate-200"
               : isActive("/app/settings") && theme.theme === "dark"

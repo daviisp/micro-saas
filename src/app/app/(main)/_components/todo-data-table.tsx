@@ -40,9 +40,28 @@ import {
 } from "@/components/ui/table";
 import { Todo } from "@/services/types/todo";
 import { Badge } from "@/components/ui/badge";
-import { deleteTodo, updateTodo } from "../actions";
+import { deleteTodo, updateTodo, updateTodoTitle } from "../actions";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateTitleSchema } from "@/services/schemas/update-title-schema";
 
 const data: Todo[] = [
   {
@@ -81,6 +100,8 @@ type TodoDataTableProps = {
 
 export function TodoDataTable({ data }: TodoDataTableProps) {
   const router = useRouter();
+
+  const [todoTitle, setTodoTitle] = React.useState("");
 
   const handleUpdateTodo = async (todoId: string) => {
     try {
@@ -176,8 +197,6 @@ export function TodoDataTable({ data }: TodoDataTableProps) {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const todo = row.original;
-
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -186,23 +205,46 @@ export function TodoDataTable({ data }: TodoDataTableProps) {
                 <DotsHorizontalIcon className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent
+              align="end"
+              onClick={(ev) => ev.stopPropagation()}
+            >
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(todo.id)}
-              >
-                Copy todo ID
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleUpdateTodo(todo.id)}>
-                {todo.doneAt ? (
+
+              <DropdownMenuItem
+                onClick={() => handleUpdateTodo(row.original.id)}
+              >
+                {row.original.doneAt ? (
                   <span>Mark as not finished</span>
                 ) : (
                   <span>Mark as done</span>
                 )}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDeleteTodo(todo.id)}>
-                Delete
+
+              <DropdownMenuItem>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <span>Delete</span>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Are you absolutely sure?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. Are you sure you want to
+                        permanently delete this file from our servers?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        type="submit"
+                        onClick={() => handleDeleteTodo(row.original.id)}
+                      >
+                        Confirm
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
