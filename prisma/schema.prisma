@@ -1,10 +1,10 @@
-datasource db {
-  provider = "postgresql"
-  url      = "file:./dev.db"
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -15,6 +15,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+
 
   stripeCustomerId         String?
   stripePriceId            String?
