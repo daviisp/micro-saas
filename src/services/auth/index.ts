@@ -12,6 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
   ],
+  secret: process.env.AUTH_SECRET,
   events: {
     async createUser(message) {
       await createUserInStripe({
